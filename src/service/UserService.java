@@ -12,6 +12,7 @@ import validators.PasswordValidator;
 import validators.exceptions.EmailValidateException;
 import validators.exceptions.PasswordValidateException;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UserService implements IS_UserService {
@@ -31,6 +32,22 @@ public class UserService implements IS_UserService {
         if (!userRepository.isEmailExist(email)) {
             user = userRepository.addUser(email, password);
         }
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.getAllUsers();
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email);
+    }
+
+    @Override
+    public Optional<User> getUserById(int id) {
+        User user = userRepository.getUserById(id);
         return Optional.ofNullable(user);
     }
 

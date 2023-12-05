@@ -6,6 +6,7 @@ package interfaces;
 
 import model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IR_UserRepo {
@@ -14,4 +15,7 @@ public interface IR_UserRepo {
     boolean isEmailExist(String email);
     Optional<User> authorisation(String email, String password);
 
+    List<User> getAllUsers();
+
+    Optional<User> getUserByEmail(String email);
 }

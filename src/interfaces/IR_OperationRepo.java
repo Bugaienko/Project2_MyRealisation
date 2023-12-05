@@ -7,7 +7,6 @@ package interfaces;
 import model.*;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IR_OperationRepo {
 
@@ -19,5 +18,5 @@ public interface IR_OperationRepo {
     List<Operation> getUserOperations(User user);
 
 
-
-    }
+    List<Operation> getOperationsByCurrency(Currency currency);
+}

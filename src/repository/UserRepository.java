@@ -6,6 +6,7 @@ package repository;
 
 import interfaces.IR_UserRepo;
 import model.User;
+import model.UserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,16 @@ public class UserRepository implements IR_UserRepo {
     }
 
     private void initUsersTestData() {
+        User admin = new User(currentUserId.getAndIncrement(), "2", "2");
+        admin.setRole(UserRole.ADMIN);
         users.addAll(new ArrayList<>(List.of(
                 new User(currentUserId.getAndIncrement(), "test@email.net", "qwerty!Q1"),
                 new User(currentUserId.getAndIncrement(), "admin@email.net", "admin!Q1"),
                 new User(currentUserId.getAndIncrement(), "user2@email.net", "qwerty!Q1"),
                 new User(currentUserId.getAndIncrement(), "user3@email.net", "qwerty!Q1"),
-                new User(currentUserId.getAndIncrement(), "1", "1")
+                new User(currentUserId.getAndIncrement(), "1", "1"),
+                admin
+
         )));
     }
 
@@ -36,6 +41,16 @@ public class UserRepository implements IR_UserRepo {
         User user = new User(currentUserId.getAndIncrement(), email, password);
         users.add(user);
         return user;
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return new ArrayList<>(users);
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
     }
 
     @Override

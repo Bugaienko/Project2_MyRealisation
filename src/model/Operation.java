@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 public class Operation {
     private final int operationId;
     private final User user;
-    private TypeOperation type;
-    private double amount;
-    private Currency currency;
-    private double rate;
+    private final TypeOperation type;
+    private final double amount;
+    private final Currency currency;
+    private final double rate;
     private final LocalDateTime time;
 
     public Operation(int operationId, User user, TypeOperation type, double amount, Currency currency, double rate) {
@@ -33,33 +33,21 @@ public class Operation {
         return type;
     }
 
-    public void setType(TypeOperation type) {
-        this.type = type;
-    }
 
     public double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
 
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
 
     public double getRate() {
         return rate;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
 
     public LocalDateTime getTime() {
         return time;

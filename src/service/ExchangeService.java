@@ -93,15 +93,7 @@ public class ExchangeService implements IS_ExchangeService {
          */
 
         Account accountDeposit = getOrCreateAccount(user, currency);
-//        Optional<Account> accountOptionalDeposit = currencyService.getAccountByCurrency(user, currency);
-//
-//        if (accountOptionalDeposit.isEmpty()) {
-//            System.out.println("У вас нет счета в такой валюте");
-//            System.out.println("Открываем счет для работы с " + currency.getCode());
-//            accountDeposit = currencyService.createAccount(user, currency);
-//        } else {
-//            accountDeposit = accountOptionalDeposit.get();
-//        }
+
 
         Operation operationDeposit = currencyService.createOperation(user, TypeOperation.DEPOSIT, amount, currency, 1);
 

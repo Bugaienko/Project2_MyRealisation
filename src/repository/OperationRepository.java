@@ -38,5 +38,10 @@ public class OperationRepository implements IR_OperationRepo {
         return operations.stream().collect(Collectors.groupingBy(Operation::getUser)).getOrDefault(user, new ArrayList<>());
     }
 
+    @Override
+    public List<Operation> getOperationsByCurrency(Currency currency) {
+        return operations.stream().filter(operation -> operation.getCurrency().equals(currency)).collect(Collectors.toList());
+    }
+
 
 }

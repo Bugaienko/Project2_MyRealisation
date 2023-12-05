@@ -22,7 +22,7 @@ public interface IS_CurrencyService {
 
     Account createAccount(User user, Currency currency);
     List<Account> getUserAccounts(User user);
-    boolean deleteAccount(User user, Account account);
+    boolean deleteAccount(User user, Currency currency);
     Optional<Account> getAccountByCurrency(User user, Currency currency);
     boolean accountApplyOperation(Account account, Operation operation);
 
@@ -31,12 +31,18 @@ public interface IS_CurrencyService {
 
 
     Operation createOperation(User user, TypeOperation typeOperation, double amount, Currency currency, double rate);
-    boolean saveOperation(Operation operation); // одно и тоже??
-    boolean saveHistory(Operation operation); // одно и тоже??
-    boolean saveHistory(List<Operation> operations);
+    // boolean saveOperation(Operation operation); // одно и тоже??
+    //boolean saveHistory(Operation operation); // одно и тоже??
+    // boolean saveHistory(List<Operation> operations);
 
     List<Operation> getOperationsHistory(User user);
 
 
+    boolean isAccountExist(User user, Currency currency);
 
+    Currency createCurrency(String code, String title, double rate);
+
+    List<Operation> getAllOperationByCurrency(Currency currency);
+
+    void setCurrencyRate(Currency currency, double rate);
 }

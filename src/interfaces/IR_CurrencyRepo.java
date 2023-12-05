@@ -23,4 +23,6 @@ public interface IR_CurrencyRepo {
     void addRateToHistory(Currency currency, Rate rate);
 
     Map<String, Rate> getRates();
+
+    Currency createNewCurrency(String code, String title, double rate);
 }

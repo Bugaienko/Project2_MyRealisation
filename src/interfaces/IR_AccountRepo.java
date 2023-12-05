@@ -25,6 +25,8 @@ public interface IR_AccountRepo {
 
     List<Operation> getHistory(Account account);
 
+    boolean isAccountExist(User user, Currency currency);
+
 
 
 }

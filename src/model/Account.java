@@ -12,14 +12,13 @@ public class Account {
     private double balance;
     private Currency currency;
     private final User user;
-   // private List<Operation> history;
-    // TODO вынести в репозиторий
+
 
     public Account(int id, Currency currency, User user) {
         this.id = id;
         this.currency = currency;
         this.user = user;
-       // this.history = new ArrayList<>();
+
     }
 
     public int getId() {
@@ -46,13 +45,7 @@ public class Account {
         this.currency = currency;
     }
 
-   // public List<Operation> getHistory() {
-       // return history;
-    //}
 
-//    public void setHistory(List<Operation> history) {
-//        this.history = history;
-//    }
 
 
     public String info() {

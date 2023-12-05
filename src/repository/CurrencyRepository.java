@@ -53,12 +53,11 @@ public class CurrencyRepository implements IR_CurrencyRepo {
         rates.put("PLN", ratePLN);
         rates.put("CZK", rateCZK);
 
-        //TODO раскомментировать после добавления реализации метода
-//        addRateToHistory("EUR", rateEUR);
-//        addRateToHistory("USD", rateUSD);
-//        addRateToHistory("GBP", rateGBP);
-//        addRateToHistory("PLN", ratePLN);
-//        addRateToHistory("CZK", rateCZK);
+        addRateToHistory("EUR", rateEUR);
+        addRateToHistory("USD", rateUSD);
+        addRateToHistory("GBP", rateGBP);
+        addRateToHistory("PLN", ratePLN);
+        addRateToHistory("CZK", rateCZK);
 
     }
 
@@ -94,10 +93,10 @@ public class CurrencyRepository implements IR_CurrencyRepo {
 
     @Override
     public void addRateToHistory(String curCode, Rate rate) {
-       historyRates.merge(curCode, new ArrayList<>(List.of(rate)), (oldL, newL) -> {
-           oldL.addAll(newL);
-           return oldL;
-       });
+        historyRates.merge(curCode, new ArrayList<>(List.of(rate)), (oldL, newL) -> {
+            oldL.addAll(newL);
+            return oldL;
+        });
     }
 
     @Override
@@ -108,5 +107,21 @@ public class CurrencyRepository implements IR_CurrencyRepo {
     @Override
     public Map<String, Rate> getRates() {
         return rates;
+    }
+
+    public void setRate(Currency currency, double rate) {
+        Rate rate1 = new Rate(rate);
+        rates.put(currency.getCode(), rate1);
+        addRateToHistory(currency.getCode(), rate1);
+    }
+
+
+    @Override
+    public Currency createNewCurrency(String code, String title, double rate) {
+        Currency currency = new Currency(code, title);
+        currencyMap.put(currency.getCode(), currency);
+        setRate(currency, rate);
+
+        return currency;
     }
 }

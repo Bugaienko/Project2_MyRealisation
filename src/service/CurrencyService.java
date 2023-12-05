@@ -67,7 +67,27 @@ public class CurrencyService implements IS_CurrencyService {
     }
 
     @Override
-    public boolean deleteAccount(User user, Account account) {
+    public boolean deleteAccount(User user, Currency currency) {
+        List<Account> userAccounts = accountRepo.getAllUsersAccounts(user);
+        if (userAccounts.isEmpty()) {
+            System.out.println("У вас нет активных счетов");
+            return false;
+        }
+
+
+        Optional<Account> accountOptional = accountRepo.getUserAccountByCurrency(user, currency);
+        if (accountOptional.isEmpty()) {
+            System.out.println("У вас нет счета в такой валюте");
+            return false;
+        }
+
+        Account account = accountOptional.get();
+        if (account.getBalance() > 0) {
+            System.out.printf("На счету %.2f %s\n", account.getBalance(), account.getCurrency().getCode());
+            System.out.println("Вы не можете закрыть не счет c ненулевым остатком");
+            return false;
+        }
+
         return accountRepo.deleteAccount(user, account);
     }
 
@@ -89,23 +109,6 @@ public class CurrencyService implements IS_CurrencyService {
         return operationRepo.createOperation(user, typeOperation, amount, currency, rate);
     }
 
-    @Override
-    public boolean saveOperation(Operation operation) {
-        //Todo
-        return false;
-    }
-
-    @Override
-    public boolean saveHistory(Operation operation) {
-        //Todo
-        return false;
-    }
-
-    @Override
-    public boolean saveHistory(List<Operation> operations) {
-        //Todo
-        return false;
-    }
 
     @Override
     public List<Operation> getOperationsHistory(User user) {
@@ -114,5 +117,25 @@ public class CurrencyService implements IS_CurrencyService {
 
     public List<Operation> getAccountHistory(Account account){
         return accountRepo.getHistory(account);
+    }
+
+    @Override
+    public boolean isAccountExist(User user, Currency currency) {
+        return accountRepo.isAccountExist(user, currency);
+    }
+
+    @Override
+    public Currency createCurrency(String code, String title, double rate) {
+        return currencyRepo.createNewCurrency(code, title, rate);
+    }
+
+    @Override
+    public List<Operation> getAllOperationByCurrency(Currency currency) {
+        return operationRepo.getOperationsByCurrency(currency);
+    }
+
+    @Override
+    public void setCurrencyRate(Currency currency, double rate) {
+        currencyRepo.setRate(currency, rate);
     }
 }

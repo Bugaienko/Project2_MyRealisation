@@ -6,19 +6,20 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class User {
     private final int id; // идентификатор
     private String email; // идентификатор?
     private String password;
     private UserRole role;
-    private final List<Operation> operations; // надо ли здесь хранить? скорее нет, чем да
+//    private final List<Operation> operations; // надо ли здесь хранить? скорее нет, чем да
 
     public User(int id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.operations = new ArrayList<>();
+//        this.operations = new ArrayList<>();
         this.role = UserRole.CLIENT;
         //this.accounts = new ArrayList<>();
 
@@ -52,14 +53,31 @@ public class User {
         return password;
     }
 
-    public List<Operation> getOperations() {
-        return operations;
-    }
+//    public List<Operation> getOperations() {
+//        return operations;
+//    }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        return result;
+    }
 
     @Override
     public String toString() {

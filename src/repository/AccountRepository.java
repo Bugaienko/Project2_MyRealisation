@@ -56,7 +56,7 @@ public class AccountRepository implements IR_AccountRepo {
 
     @Override
     public boolean applyOperation(Account account, Operation operation) {
-        //TODO
+
         if (!account.getCurrency().equals(operation.getCurrency())) return false;
 
         double balance = account.getBalance();
@@ -83,5 +83,12 @@ public class AccountRepository implements IR_AccountRepo {
     @Override
     public List<Operation> getHistory(Account account) {
         return accountOperations.getOrDefault(account.getId(), new ArrayList<>());
+    }
+
+    @Override
+    public boolean isAccountExist(User user, Currency currency) {
+        return accounts.getOrDefault(user.getId(), new ArrayList<>()).stream()
+                .map(Account::getCurrency)
+                .anyMatch(c1 -> c1.equals(currency));
     }
 }
