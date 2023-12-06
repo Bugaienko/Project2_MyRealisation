@@ -25,4 +25,6 @@ public interface IR_CurrencyRepo {
     Map<String, Rate> getRates();
 
     Currency createNewCurrency(String code, String title, double rate);
+
+    void deleteCurrencyFromDB(Currency currency);
 }

@@ -23,7 +23,7 @@ public class ExchangeService implements IS_ExchangeService {
     }
 
     @Override
-    public boolean exchangeCurrency(User user, Currency currencySell, Currency currencyBuy, double amount) throws ExchangeDataError {
+    public boolean exchangeCurrency(User user, Currency currencySell, Currency currencyBuy, double amount, boolean isConfirmed) throws ExchangeDataError {
         Scanner scanner = new Scanner(System.in);
 
         /*
@@ -57,11 +57,13 @@ public class ExchangeService implements IS_ExchangeService {
                 amount, currencySell.getTitle(), amountBuy, currencyBuy.getCode(), crossCourse);
 
 
-        System.out.println("Для подтверждения операции введете Y или y");
-        String confirm = scanner.nextLine();
-        if (!"y".equalsIgnoreCase(confirm.trim())) {
-            System.out.println("Операция прервана");
-            return false;
+        if (isConfirmed) {
+            System.out.println("Для подтверждения операции введете Y или y");
+            String confirm = scanner.nextLine();
+            if (!"y".equalsIgnoreCase(confirm.trim())) {
+                System.out.println("Операция прервана");
+                return false;
+            }
         }
         System.out.println("Производится обмен (скрестите пальцы!)");
 

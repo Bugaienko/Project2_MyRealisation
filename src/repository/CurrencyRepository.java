@@ -124,4 +124,10 @@ public class CurrencyRepository implements IR_CurrencyRepo {
 
         return currency;
     }
+
+    @Override
+    public void deleteCurrencyFromDB(Currency currency) {
+       currencyMap.remove(currency.getCode());
+       rates.remove(currency.getCode());
+    }
 }

@@ -4,22 +4,27 @@ package service;
 @author Sergey Bugaienko
 */
 
+import model.Account;
 import model.Currency;
 import model.Operation;
 import model.User;
 import validators.exceptions.AdminRequestDataError;
+import validators.exceptions.ExchangeDataError;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class AdminService {
 
     private final UserService userService;
     private final CurrencyService currencyService;
+    private final ExchangeService exchangeService;
 
-    public AdminService(UserService userService, CurrencyService currencyService) {
+    public AdminService(UserService userService, CurrencyService currencyService, ExchangeService exchangeService) {
         this.userService = userService;
         this.currencyService = currencyService;
+        this.exchangeService = exchangeService;
     }
 
     public Currency createNewCurrency(String code, String title, double rate) throws AdminRequestDataError {
@@ -51,7 +56,8 @@ public class AdminService {
             }
         }
 
-        if (userOptional.isEmpty())  throw new AdminRequestDataError("Пользователя по запросу '" + userIdentification + "' не найден");
+        if (userOptional.isEmpty())
+            throw new AdminRequestDataError("Пользователя по запросу '" + userIdentification + "' не найден");
 
         User user = userOptional.get();
         System.out.println("Найден пользователь: " + user);
@@ -63,12 +69,48 @@ public class AdminService {
     }
 
     public void changeCurrencyRate(Currency currency, double rate) throws AdminRequestDataError {
-        if (rate <= 0) throw new AdminRequestDataError("Не верный курс валюты " +  rate);
+        if (rate <= 0) throw new AdminRequestDataError("Не верный курс валюты " + rate);
         double currentRate = currencyService.getCurrencyRate(currency);
         if (currentRate == rate) throw new AdminRequestDataError("У валюты текущий курс равен устанавливаемому");
         if (currency.getCode().equalsIgnoreCase("EUR")) throw new AdminRequestDataError("Курс Евро менять нельзя!");
 
         currencyService.setCurrencyRate(currency, rate);
 
+    }
+
+    public void deleteCurrency(Currency currency) throws AdminRequestDataError {
+        if (currency.getCode().equalsIgnoreCase("EUR")) throw new AdminRequestDataError("EUR удалять нельзя");
+        List<User> users = currencyService.getAllUsersWithAccountInCurrency(currency);
+//        List<Account> accounts = currencyService.getAllAccountsByCurrency(currency);
+//     accounts = accounts.stream().filter(account -> account.getBalance() > 0).collect(Collectors.toList());
+//        if (!accounts.isEmpty()) {
+        for (User user : users) {
+            checkAndChangeDeletingCurrency(user, currency);
+        }
+//        } else {
+//            //Todo safe delete
+//        }
+        System.out.println("Все счета закрыты");
+
+        currencyService.deleteCurrencyFromDB(currency);
+        System.out.println("Валюта удалена из списка доступных");
+
+    }
+
+    private void checkAndChangeDeletingCurrency(User user, Currency currency) {
+        Currency eur = currencyService.getCurrencyByCode("EUR");
+        Optional<Account> accountForDelete = currencyService.getAccountByCurrency(user, currency);
+        Account accountDel = null;
+        if (accountForDelete.isPresent()) accountDel = accountForDelete.get();
+        double balance = accountDel.getBalance();
+        if (balance > 0) {
+            try {
+                boolean isChanged = exchangeService.exchangeCurrency(user, currency, eur, balance, false);
+                if (isChanged) System.out.println("Обмен удаляемой валюты проведен успешно!");
+            } catch (ExchangeDataError e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        currencyService.deleteAccount(user, currency);
     }
 }

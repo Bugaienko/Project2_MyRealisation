@@ -45,4 +45,10 @@ public interface IS_CurrencyService {
     List<Operation> getAllOperationByCurrency(Currency currency);
 
     void setCurrencyRate(Currency currency, double rate);
+
+    List<User> getAllUsersWithAccountInCurrency(Currency currency);
+
+    List<Account> getAllAccountsByCurrency(Currency currency);
+
+    void deleteCurrencyFromDB(Currency currency);
 }

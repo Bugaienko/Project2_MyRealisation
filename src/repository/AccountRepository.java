@@ -10,6 +10,7 @@ import model.Currency;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class AccountRepository implements IR_AccountRepo {
     private final AtomicInteger currentAccountId = new AtomicInteger(1);
@@ -90,5 +91,17 @@ public class AccountRepository implements IR_AccountRepo {
         return accounts.getOrDefault(user.getId(), new ArrayList<>()).stream()
                 .map(Account::getCurrency)
                 .anyMatch(c1 -> c1.equals(currency));
+    }
+
+    public List<Account> getAllAccounts(){
+        return accounts.entrySet().stream().flatMap(entries -> entries.getValue().stream()).collect(Collectors.toList());
+    }
+
+    public List<Account> getAllAccountsByCurrency(Currency currency){
+        return getAllAccounts().stream().filter(acc -> acc.getCurrency().equals(currency)).collect(Collectors.toList());
+    }
+
+    public List<User> getAllUsersWithAccountByCurrency(Currency currency){
+         return getAllAccountsByCurrency(currency).stream().map(Account::getUser).collect(Collectors.toList());
     }
 }

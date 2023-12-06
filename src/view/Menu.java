@@ -34,7 +34,7 @@ public class Menu {
         this.userService = userService;
         this.currencyService = currencyService;
         this.exchangeService = new ExchangeService(userService, currencyService);
-        this.adminService = new AdminService(userService, currencyService);
+        this.adminService = new AdminService(userService, currencyService, exchangeService);
     }
 
     public void run() {
@@ -249,7 +249,7 @@ public class Menu {
                 waitRead();
                 break;
             case 5:
-                //TODO adminDeleteCurrency();
+                adminDeleteCurrency();
 
                 waitRead();
                 break;
@@ -282,7 +282,25 @@ public class Menu {
         }
     }
 
+    private void adminDeleteCurrency() {
+        System.out.println("Удаление валюты");
+
+        Currency currency = getCurrencyByInputCode();
+        if (currency == null) {
+            System.out.println("Нет у нас такой валюты");
+            return;
+        }
+
+        try {
+            adminService.deleteCurrency(currency);
+        } catch (AdminRequestDataError e) {
+            System.out.println(e.getMessage());
+            System.err.println("Ошибка!");
+        }
+    }
+
     private void adminChangeCurrencyRate() {
+        System.out.println("Изменение курса валюты");
 
         Currency currency = getCurrencyByInputCode();
         if (currency == null) {
@@ -422,7 +440,7 @@ public class Menu {
         SCANNER.nextLine();
 
         try {
-            exchangeService.exchangeCurrency(activeUser, currencySell, currencyBuy, amount);
+            exchangeService.exchangeCurrency(activeUser, currencySell, currencyBuy, amount, true);
         } catch (ExchangeDataError e) {
             System.out.println("Введены некорректные данные");
             System.out.println(e.getMessage());

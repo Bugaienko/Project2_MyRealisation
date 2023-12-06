@@ -112,10 +112,10 @@ public class CurrencyService implements IS_CurrencyService {
 
     @Override
     public List<Operation> getOperationsHistory(User user) {
-       return operationRepo.getUserOperations(user);
+        return operationRepo.getUserOperations(user);
     }
 
-    public List<Operation> getAccountHistory(Account account){
+    public List<Operation> getAccountHistory(Account account) {
         return accountRepo.getHistory(account);
     }
 
@@ -137,5 +137,20 @@ public class CurrencyService implements IS_CurrencyService {
     @Override
     public void setCurrencyRate(Currency currency, double rate) {
         currencyRepo.setRate(currency, rate);
+    }
+
+    @Override
+    public List<User> getAllUsersWithAccountInCurrency(Currency currency) {
+        return accountRepo.getAllUsersWithAccountByCurrency(currency);
+    }
+
+    @Override
+    public List<Account> getAllAccountsByCurrency(Currency currency) {
+        return accountRepo.getAllAccountsByCurrency(currency);
+    }
+
+    @Override
+    public void deleteCurrencyFromDB(Currency currency) {
+        currencyRepo.deleteCurrencyFromDB(currency);
     }
 }
