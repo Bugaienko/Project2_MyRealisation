@@ -43,12 +43,18 @@ public class Menu {
 
     private void showMenu() {
         while (true) {
+            boolean isLogged = userService.getActiveUser() != null;
             System.out.println("Добро пожаловать в обмен валют");
             System.out.println("=========== v 1.0 ===========");
-            System.out.println("1. Обмен валют");
-            System.out.println("2. Меню пользователей");
-            System.out.println("3. Меню администратора");
+            System.out.println("1. Меню пользователей");
+            if (isLogged) {
+                System.out.println("2. Обмен валют");
+                System.out.println("3. Меню администратора");
+            }
             System.out.println("0. Выход");
+            if (!isLogged) {
+                System.out.println("Авторизуйтесь в системе для доступа к другим меню");
+            }
             System.out.println("\nСделайте выбор:");
             int choice = SCANNER.nextInt();
             SCANNER.nextLine();
@@ -63,10 +69,10 @@ public class Menu {
 
     private void showSubMenu(int choice) {
         switch (choice) {
-            case 1:
+            case 2:
                 showCurrencyMenu();
                 break;
-            case 2:
+            case 1:
                 showUsersMenu();
                 break;
             case 3:
@@ -139,15 +145,21 @@ public class Menu {
 
     private void showUsersMenu() {
         while (true) {
+            boolean isLogged = userService.getActiveUser() != null;
             System.out.println("Users Menu");
             System.out.println("1. Авторизоваться");
             System.out.println("2. Регистрация пользователя");
-            System.out.println("3. Список счетов пользователя");
-            System.out.println("4. Добавить счет");
-            System.out.println("5. Удалить счет");
-            System.out.println("6. История всех операций");
-            System.out.println("7. История операций по валюте");
+            if (isLogged) {
+                System.out.println("3. Список счетов пользователя");
+                System.out.println("4. Добавить счет");
+                System.out.println("5. Удалить счет");
+                System.out.println("6. История всех операций");
+                System.out.println("7. История операций по валюте");
+            }
             System.out.println("0. Вернуться в предыдущее меню");
+            if (!isLogged) {
+                System.out.println("Авторизуйтесь в системе для доступа к другим меню");
+            }
             System.out.println("\nСделайте выбор:");
             int choice = SCANNER.nextInt();
             SCANNER.nextLine();
