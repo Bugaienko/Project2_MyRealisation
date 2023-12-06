@@ -13,7 +13,6 @@ public class User {
     private String email; // идентификатор?
     private String password;
     private UserRole role;
-//    private final List<Operation> operations; // надо ли здесь хранить? скорее нет, чем да
 
     public User(int id, String email, String password) {
         this.id = id;

@@ -81,15 +81,9 @@ public class AdminService {
     public void deleteCurrency(Currency currency) throws AdminRequestDataError {
         if (currency.getCode().equalsIgnoreCase("EUR")) throw new AdminRequestDataError("EUR удалять нельзя");
         List<User> users = currencyService.getAllUsersWithAccountInCurrency(currency);
-//        List<Account> accounts = currencyService.getAllAccountsByCurrency(currency);
-//     accounts = accounts.stream().filter(account -> account.getBalance() > 0).collect(Collectors.toList());
-//        if (!accounts.isEmpty()) {
         for (User user : users) {
             checkAndChangeDeletingCurrency(user, currency);
         }
-//        } else {
-//            //Todo safe delete
-//        }
         System.out.println("Все счета закрыты");
 
         currencyService.deleteCurrencyFromDB(currency);

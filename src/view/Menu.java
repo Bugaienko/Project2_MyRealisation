@@ -465,7 +465,7 @@ public class Menu {
 
     private Currency getCurrencyByInputCode() {
         System.out.println("Введите код валюты:");
-        String inputCur = SCANNER.nextLine().trim().toUpperCase();
+        String inputCur = SCANNER.nextLine();
         return currencyService.getCurrencyByCode(inputCur.trim().toUpperCase());
     }
 

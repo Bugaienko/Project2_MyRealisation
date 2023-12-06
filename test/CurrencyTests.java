@@ -3,6 +3,7 @@
 @author Sergey Bugaienko
 */
 
+import model.Rate;
 import model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import service.UserService;
 import validators.exceptions.EmailValidateException;
 import validators.exceptions.PasswordValidateException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -132,6 +134,21 @@ public class CurrencyTests {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("testTest")
+    void testStreamData(String string, int[] ints, boolean flag, Rate rate) {
+        System.out.println(string + " rate: " + rate.getRate());
+        System.out.println(Arrays.toString(ints) + " flag: " + flag);
+        System.out.println("=====================================");
+    }
+
+    static Stream<Arguments> testTest(){
+        return Stream.of(
+                Arguments.of("String", new int[]{1,2,3,4,5}, true,  new Rate(3.5)),
+                Arguments.of("Trye", new int[]{5,5, 6,54}, false,  new Rate(0.))
+        );
+    }
+
     @Test
     void testLogout() {
         User authUser = userService.authorisation("test@email.net", "qwerty!Q1");
@@ -145,14 +162,18 @@ public class CurrencyTests {
     @ParameterizedTest
     @MethodSource("dataTestGetUserById")
     void testGetUserById(int userId, String email, String password) {
-        User user = userService.authorisation(email, password);
+        Optional<User> userOptional = userService.getUserById(userId);
+        assertTrue(userOptional.isPresent());
+        User user = userOptional.get();
         assertEquals(userId, user.getId());
+        assertEquals(email, user.getEmail());
+        assertEquals(password, user.getPassword());
     }
 
     static Stream<Arguments> dataTestGetUserById() {
         return Stream.of(
-                Arguments.of(1, "test@email.net", "qwerty!Q1"),
-                Arguments.of(4, "user3@email.net", "qwerty!Q1")
+                Arguments.of(2, "test@email.net", "qwerty!Q1"),
+                Arguments.of(5, "user3@email.net", "qwerty!Q1")
         );
     }
 }
